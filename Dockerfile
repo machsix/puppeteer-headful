@@ -5,18 +5,19 @@ LABEL "com.github.actions.description"="A GitHub Action / Docker image for Puppe
 LABEL "com.github.actions.icon"="layout"
 LABEL "com.github.actions.color"="blue"
 
-LABEL "repository"="https://github.com/mujo-code/puppeteer-headful"
-LABEL "homepage"="https://github.com/mujo-code/puppeteer-headful"
-LABEL "maintainer"="Jacob Lowe"
+LABEL "repository"="https://github.com/machsix/puppeteer-headful"
+LABEL "homepage"="https://github.com/machsix/puppeteer-headful"
+LABEL "maintainer"="machsix"
+
+ARG CHROME_VERSION="124.0.6367.207-1"
 
 RUN  apt-get update \
      # Install latest chrome dev package, which installs the necessary libs to
      # make the bundled version of Chromium that Puppeteer installs work.
      && apt-get install -y wget xvfb --no-install-recommends \
-     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-     && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-     && apt-get update \
-     && apt-get install -y google-chrome-stable --no-install-recommends \
+     && wget --no-verbose -O /tmp/chrome.deb https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
+     && apt install -y /tmp/chrome.deb \
+     && rm /tmp/chrome.deb \
      && rm -rf /var/lib/apt/lists/*
 
 
